@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Clases de Niños - Comunidad Bahá'í de España (Vercel)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'baha-teal': '#008080',
+                        'baha-light': '#E0F2F2',
+                        'baha-accent': '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    
+    <style>
+        .signature-pad-canvas {
+            border: 2px solid #008080;
+            border-radius: 6px;
+            cursor: crosshair;
+            width: 100%;
+            height: 150px;
+        }
+        /* ... (Otros estilos CSS, omitidos por brevedad) ... */
+        #loading-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+            text-align: center;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #008080;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-baha-light font-sans antialiased">
+
+    <div id="loading-message">
+        <div class="spinner mb-4"></div>
+        <p class="text-xl font-semibold text-baha-teal">Enviando registro y guardando firma...</p>
+        <p class="text-gray-600">Por favor, espera unos segundos.</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-10 pt-4">
+            </header>
+        
+        <hr class="border-t border-baha-teal/50 mb-8">
+
+        <div class="bg-white shadow-2xl rounded-xl p-6 sm:p-8 lg:p-10 border-t-8 border-baha-teal">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Hoja de Autorización y Datos</h2>
+            
+            <form id="registration-form" class="space-y-6">
+                
+                <input type="hidden" name="signature_data" id="signatureData">
+                
+                <h3 class="text-xl font-semibold text-baha-teal border-b pb-2 pt-4">Datos del Evento</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="evento" class="block text-sm font-medium text-gray-700">Evento / Clases:</label>
+                        <input type="text" name="evento" id="evento" value="Registro Clases de Niños" readonly class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 bg-baha-light/50 font-medium" required>
+                    </div>
+                    <div>
+                        <label for="lugar" class="block text-sm font-medium text-gray-700">Lugar:</label>
+                        <input type="text" name="lugar" id="lugar" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                    <div>
+                        <label for="fecha_horario" class="block text-sm font-medium text-gray-700">Fecha(s) / Horario:</label>
+                        <input type="text" name="fecha_horario" id="fecha_horario" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                    <div>
+                        <label for="email_contacto" class="block text-sm font-medium text-gray-700">Email Contacto (Responsable):</label>
+                        <input type="email" name="email_contacto" id="email_contacto" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal">
+                    </div>
+                </div>
+
+                ---
+
+                <h3 class="text-xl font-semibold text-baha-teal border-b pb-2 pt-4">Datos del Padre / Madre / Tutor Legal</h3>
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label for="nombre_tutor" class="block text-sm font-medium text-gray-700">Nombre y apellidos del padre/madre/tutor:</label>
+                        <input type="text" name="nombre_tutor" id="nombre_tutor" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="email_tutor" class="block text-sm font-medium text-gray-700">Email:</label>
+                        <input type="email" name="email_tutor" id="email_tutor" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                    <div>
+                        <label for="telf_movil" class="block text-sm font-medium text-gray-700">Telf. móvil:</label>
+                        <input type="tel" name="telf_movil" id="telf_movil" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                    <div>
+                        <label for="dni_tutor" class="block text-sm font-medium text-gray-700">DNI / NIE:</label>
+                        <input type="text" name="dni_tutor" id="dni_tutor" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                </div>
+
+                ---
+
+                <h3 class="text-xl font-semibold text-baha-teal border-b pb-2 pt-4">Datos del Menor</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nombre_menor" class="block text-sm font-medium text-gray-700">Nombre y apellidos del menor:</label>
+                        <input type="text" name="nombre_menor" id="nombre_menor" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                    <div>
+                        <label for="fecha_nacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento:</label>
+                        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                </div>
+                
+                ---
+
+                <h3 class="text-xl font-semibold text-baha-teal border-b pb-2 pt-4">Autorización y Consentimiento</h3>
+                <div class="p-4 bg-baha-light border-l-4 border-baha-teal rounded-md shadow-sm">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="consentimiento_fotos" name="consentimiento_fotos" type="checkbox" class="focus:ring-baha-teal h-4 w-4 text-baha-teal border-gray-300 rounded">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="consentimiento_fotos" class="font-medium text-gray-900">
+                                Marco con una **X** si autorizo la aparición de mi hijo/a en fotos y videos con finalidad educativa y de difusión (entre participantes, familias y foros específicos).
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-700 italic">
+                    Como padre, madre o tutor legal del menor, **consiento su participación** en la actividad y confirmo la veracidad de los datos.
+                </p>
+
+                <div class="mt-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Firma del Padre/Madre/Tutor:</label>
+                    <div class="relative">
+                        <canvas id="signature-canvas" class="signature-pad-canvas"></canvas>
+                        <div id="firma-error" class="text-red-600 text-sm mt-1 hidden">Por favor, realiza tu firma antes de enviar.</div>
+                        <button type="button" id="clear-signature" class="absolute top-2 right-2 px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full hover:bg-gray-300 transition duration-150 ease-in-out">
+                            Limpiar Firma
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="fecha_firma" class="block text-sm font-medium text-gray-700">Fecha de la firma:</label>
+                        <input type="date" name="fecha_firma" id="fecha_firma" class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-3 focus:border-baha-teal focus:ring-baha-teal" required>
+                    </div>
+                </div>
+
+                ---
+                
+                <div class="pt-6">
+                    <button type="submit" id="submit-form" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-medium text-white bg-baha-teal hover:bg-baha-teal/90 focus:outline-none focus:ring-4 focus:ring-baha-teal focus:ring-offset-2 transition duration-150 ease-in-out">
+                        Enviar Autorización y Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <footer class="text-center mt-8 text-sm text-gray-600">
+            &copy; 2025 Comunidad Bahá'í de España.
+        </footer>
+
+    </div>
+
+    <script>
+        // ** ⚠️ ESTA ES LA URL DE TU DESPLIEGUE DE APPS SCRIPT ⚠️ **
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypDvDEj1cSIDzE-LZYcNOWhH6-UVzLX51q36lZnFKyYYTDJgfRGfE4xP6o9_5Ji2jE/exec'; 
+        // Ejemplo: const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz/exec'; 
+
+        const canvas = document.getElementById('signature-canvas');
+        const signaturePad = new SignaturePad(canvas);
+        const clearButton = document.getElementById('clear-signature');
+        const form = document.getElementById('registration-form');
+        const signatureDataInput = document.getElementById('signatureData');
+        const firmaError = document.getElementById('firma-error');
+        const loadingMessage = document.getElementById('loading-message');
+        const formElements = form.elements;
+
+        function clearError(input) {
+            input.classList.remove('validation-error');
+            if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
+                input.nextElementSibling.remove();
+            }
+        }
+
+        function displayError(input, message) {
+            input.classList.add('validation-error');
+            // Elimina mensaje anterior si existe
+            if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
+                input.nextElementSibling.remove();
+            }
+            // Crea mensaje de error
+            const error = document.createElement('div');
+            error.className = 'error-message text-red-600 text-sm mt-1';
+            error.textContent = message;
+            input.parentNode.insertBefore(error, input.nextSibling);
+        }
+
+        // Función para validar DNI/NIE (repetida para autosuficiencia)
+        function validateDniNie(dni) { 
+            const dniRegex = /^(\d{8})([A-Z])$/;
+            const nieRegex = /^[XYZ]\d{7}[A-Z]$/;
+            
+            dni = dni.toUpperCase().trim();
+
+            if (dniRegex.test(dni)) {
+                const number = dni.substr(0, 8);
+                const letter = dni.substr(8, 1);
+                const validLetters = 'TRWAGMYFPDXBNJZSQVHLCKE';
+                return validLetters.charAt(number % 23) === letter;
+            } else if (nieRegex.test(dni)) {
+                dni = dni.replace('X', '0').replace('Y', '1').replace('Z', '2');
+                const number = dni.substr(0, 8);
+                const letter = dni.substr(8, 1);
+                const validLetters = 'TRWAGMYFPDXBNJZSQVHLCKE';
+                return validLetters.charAt(number % 23) === letter;
+            }
+            return false;
+        }
+
+        // Validación principal de campos
+        function validateForm() {
+            let isValid = true;
+            
+            // Recolectar todos los inputs (excluyendo hidden y buttons)
+            const inputs = form.querySelectorAll('input:required, input[type="email"], input[type="tel"]');
+            
+            inputs.forEach(input => {
+                clearError(input);
+
+                // 1. Validación de campos vacíos (ya cubierto por 'required', pero aquí se refuerza el feedback)
+                if (input.hasAttribute('required') && input.value.trim() === '') {
+                    displayError(input, 'Este campo es obligatorio.');
+                    isValid = false;
+                }
+                
+                // 2. Validación de Email
+                if (input.type === 'email' && input.value.trim() !== '' && !input.checkValidity()) {
+                    displayError(input, 'Introduce un correo electrónico válido.');
+                    isValid = false;
+                }
+
+                // 3. Validación de Teléfono Móvil (Regex simple para 9 dígitos españoles, permite prefijo +34)
+                if (input.id === 'telf_movil' && input.value.trim() !== '') {
+                    const phoneRegex = /^(\+34|0034)?\s?(\d{9})$/;
+                    if (!phoneRegex.test(input.value.trim())) {
+                        displayError(input, 'Introduce un número de móvil español válido (ej. 600123456).');
+                        isValid = false;
+                    }
+                }
+
+                // 4. Validación de DNI/NIE
+                if (input.id === 'dni_tutor' && input.value.trim() !== '') {
+                    if (!validateDniNie(input.value.trim())) {
+                        displayError(input, 'El formato de DNI/NIE no es válido.');
+                        isValid = false;
+                    }
+                }
+            });
+
+            // 5. Validación de Firma
+            if (signaturePad.isEmpty()) {
+                firmaError.classList.remove('hidden'); 
+                isValid = false;
+            } else {
+                firmaError.classList.add('hidden'); 
+                signatureDataInput.value = signaturePad.toDataURL("image/png"); // Guardar la firma en PNG
+            }
+
+            // 6. Desplazarse al primer error si no es válido
+            if (!isValid) {
+                const firstInvalid = form.querySelector('.validation-error, #firma-error:not(.hidden)');
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            return isValid;
+        }
+
+
+
+        // --- Preparación de Datos ---
+        function prepareDataForSubmission() {
+            const data = {};
+             // Recorre todos los elementos del formulario
+            for (let i = 0; i < formElements.length; i++) {
+                const element = formElements[i];
+                
+                // Solo considera elementos con un nombre y que no sean botones
+                if (element.name && element.type !== 'button') {
+                    
+                    if (element.type === 'checkbox') {
+                        // Para checkboxes, guarda true si está marcado, false si no lo está
+                        data[element.name] = element.checked;
+                    } else if (element.name === 'signature_data') {
+                        // La firma ya se guarda en el campo oculto durante la validación
+                        data[element.name] = element.value;
+                    } 
+                    else if (element.type === 'date') {
+                        // Formatear fechas si es necesario (ej. YYYY-MM-DD)
+                        data[element.name] = element.value;
+                    }
+                    else {
+                        // Para otros campos de texto, email, tel, etc.
+                        data[element.name] = element.value.trim();
+                    }
+                }
+            }
+
+            // Eliminar el campo 'minor_data' si no se usa realmente
+            delete data.minor_data;
+
+            return data;
+        }
+
+
+        // --- Lógica Principal del Evento Submit (Envío POST) ---
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            if (!APPS_SCRIPT_URL.includes('script.google.com')) {
+                alert('⚠️ ERROR: Por favor, reemplaza "[TU_URL_DE_DESPLIEGUE_APPS_SCRIPT]" con tu URL real de Apps Script.');
+                return;
+            }
+
+            if (validateForm()) {
+                loadingMessage.style.display = 'flex'; // Mostrar carga
+                
+                const formData = prepareDataForSubmission();
+                
+                try {
+                    // ** 🚀 SOLICITUD FETCH HTTP POST A APPS SCRIPT 🚀 **
+                    const response = await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // Necesario para evitar problemas CORS con Google
+                        headers: {
+                            'Content-Type': 'application/json', // Enviamos los datos como JSON
+                        },
+                        body: JSON.stringify(formData) // Convierte el objeto JS a una cadena JSON
+                    });
+
+                    // Debido a 'no-cors', la respuesta será 'opaque' y no podremos leer el cuerpo.
+                    // Nos basamos en que la solicitud fue enviada sin errores de red.
+                    if (response.type === 'opaque' || response.ok) {
+                        alert('✅ ¡Registro enviado con éxito! Los datos han sido recibidos por Google.');
+                        form.reset(); 
+                        signaturePad.clear(); 
+                    } else {
+                        // Esto solo capturará errores de red, no el resultado del script.
+                        alert('❌ Error al intentar conectar con el servidor de Google. Código: ' + response.status);
+                    }
+                } catch (error) {
+                    console.error('Error de red/fetch:', error);
+                    alert('❌ Fallo la conexión de red. Verifica la URL de Apps Script: ' + error.message);
+                } finally {
+                    loadingMessage.style.display = 'none';
+                }
+            }
+        });
+
+        // --- Lógica de la Firma y Responsividad (Mantenida) ---
+
+        // 1. Ajustar el tamaño del canvas al contenedor (responsividad)
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear(); // Limpiar al redimensionar
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // 2. Funcionalidad del botón de Limpiar
+        clearButton.addEventListener('click', () => {
+            signaturePad.clear();
+            firmaError.classList.add('hidden'); 
+        });
+        
+        // Ocultar errores al escribir
+        form.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => clearError(input));
+        });
+
+    </script>
+</body>
+</html>
